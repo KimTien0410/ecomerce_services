@@ -20,8 +20,10 @@ public class FeatureProduct {
     @Column(name = "feature_product_description")
     private String featureProductDescription;
     @Column(name = "start_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
     @Column(name = "end_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
     private Integer priority;
     @OneToOne()

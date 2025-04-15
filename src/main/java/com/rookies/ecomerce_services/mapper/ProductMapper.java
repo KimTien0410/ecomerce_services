@@ -1,6 +1,7 @@
 package com.rookies.ecomerce_services.mapper;
 
 import com.rookies.ecomerce_services.dto.request.RequestProduct;
+import com.rookies.ecomerce_services.dto.response.ProductItemResponse;
 import com.rookies.ecomerce_services.dto.response.ProductResponse;
 import com.rookies.ecomerce_services.entity.Product;
 import org.mapstruct.Mapper;
@@ -20,6 +21,11 @@ public interface ProductMapper {
 
     ProductResponse toProductResponse(Product product);
 
+    ProductItemResponse toProductItemResponse(Product product);
+
     List<ProductResponse> toProductResponseList(List<Product> products);
+
+    List<ProductItemResponse> toProductItemResponseList(List<Product> products);
+
 
 }

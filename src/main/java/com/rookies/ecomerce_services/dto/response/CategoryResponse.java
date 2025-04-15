@@ -11,6 +11,7 @@ import java.util.Date;
 public class CategoryResponse {
     private Long categoryId;
     private String categoryName;
+    private String categorySlug;
     private String categoryDescription;
     private Date createdOn;
     private Date lastUpdatedOn;

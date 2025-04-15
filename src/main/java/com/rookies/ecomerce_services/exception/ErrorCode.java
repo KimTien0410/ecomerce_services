@@ -20,6 +20,12 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND(404,"Không tìm thấy sản phẩm!", HttpStatus.NOT_FOUND),
     PRODUCT_PRICE_MIN(400,"Giá sản phẩm phải lớn hơn 0!", HttpStatus.BAD_REQUEST),
     STOCK_QUANTITY_MIN(400,"Số lượng sản phẩm phải lớn hơn 0!", HttpStatus.BAD_REQUEST),
+
+    ROLE_NOT_FOUND(404,"Không tìm thấy Role!", HttpStatus.NOT_FOUND),
+    EMAIL_ALREADY_EXISTS(400,"Email đã tồn tại!", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(404,"Không tìm thấy người dùng!", HttpStatus.NOT_FOUND),
+    PASSWORD_INCORRECT(400,"Mật khẩu không chính xác!", HttpStatus.BAD_REQUEST),
+    CUSTOMER_NOT_FOUND(404,"Không tìm thấy khách hàng!", HttpStatus.NOT_FOUND),
     ;
     private int code;
     private String message;

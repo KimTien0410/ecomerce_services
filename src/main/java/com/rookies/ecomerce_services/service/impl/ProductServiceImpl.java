@@ -35,26 +35,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public void addProduct(RequestProduct requestProduct,MultipartFile file) {
+    public ProductResponse addProduct(RequestProduct requestProduct,MultipartFile file) {
         Product product = productMapper.toProduct(requestProduct);
         Category category = categoryRepository.findByIdAndIsDeletedFalse(requestProduct.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         product.setCategory(category);
-        product.setDeleted(false);
+
         product.setProductSlug(slug.generateSlug(requestProduct.getProductName()));
 
-       // MultipartFile file = requestProduct.getProductImages();
         if (file != null && !file.isEmpty()) {
             String imageUrl = cloudinaryService.uploadFile(file);
             product.setProductImages(imageUrl);
         }
 
         productRepository.save(product);
-        log.info("Product added successfully: {}", product.getProductName());
+        return productMapper.toProductResponse(product);
     }
     @Transactional
     @Override
-    public void updateProduct(Long id, RequestProduct requestProduct,MultipartFile file) {
+    public ProductResponse updateProduct(Long id, RequestProduct requestProduct,MultipartFile file) {
         Product product = productRepository.findByProductIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         productMapper.updateProduct(product, requestProduct);
@@ -62,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         product.setCategory(category);
         product.setProductSlug(slug.generateSlug(requestProduct.getProductName()));
-//        MultipartFile file = requestProduct.getProductImages();
+
         if (file != null && !file.isEmpty()) {
             // Xoá ảnh cũ trước khi upload ảnh mới
             if(product.getProductImages() != null) {
@@ -72,7 +71,8 @@ public class ProductServiceImpl implements ProductService {
             product.setProductImages(imageUrl);
         }
         productRepository.save(product);
-        log.info("Product updated successfully: {}", product.getProductName());
+
+        return productMapper.toProductResponse(product);
     }
 
     @Transactional
@@ -80,11 +80,11 @@ public class ProductServiceImpl implements ProductService {
     public String deleteAndRestore(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
-        product.setDeleted(!product.isDeleted());
-        productRepository.save(product);
-        if (product.isDeleted()) {
-            return "Xoá sản phẩm thành công!";
-        }
+//        product.setDeleted(!product.isDeleted());
+//        productRepository.save(product);
+//        if (product.isDeleted()) {
+//            return "Xoá sản phẩm thành công!";
+//        }
         return "Khôi phục sản phẩm thành công!";
     }
 
@@ -124,8 +124,8 @@ public class ProductServiceImpl implements ProductService {
                     .map(productMapper::toProductResponse);
         }
         if(isFeatured){
-            Page<Product> products = productRepository.findAllByIsDeletedFalseAndIsFeaturedTrue(pageable);
-            return products.map(productMapper::toProductResponse);
+//            Page<Product> products = productRepository.findAllByIsDeletedFalseAndIsFeaturedTrue(pageable);
+//            return products.map(productMapper::toProductResponse);
         }
         Page<Product> products = productRepository.findAllByIsDeletedFalse(pageable);
         return products.map(productMapper::toProductResponse);

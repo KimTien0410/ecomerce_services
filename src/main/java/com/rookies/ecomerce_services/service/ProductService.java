@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductService {
-    public void addProduct(RequestProduct requestProduct, MultipartFile productImages);
-    public void updateProduct(Long id, RequestProduct requestProduct,MultipartFile productImages);
+    public ProductResponse addProduct(RequestProduct requestProduct, MultipartFile productImages);
+    public ProductResponse updateProduct(Long id, RequestProduct requestProduct,MultipartFile productImages);
     public String deleteAndRestore(Long id);
     public ProductResponse getProductById(Long id);
     public ProductResponse getProductBySlug(String slug);

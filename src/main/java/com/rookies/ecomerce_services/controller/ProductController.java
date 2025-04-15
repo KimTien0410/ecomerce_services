@@ -17,25 +17,22 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductController {
     private final ProductService productService;
     @PostMapping
-    public ApiResponse<?> add(@RequestPart @Valid RequestProduct request,
+    public ApiResponse<ProductResponse> add(@RequestPart @Valid RequestProduct request,
                               @RequestPart(required = false) MultipartFile productImages) {
-//        if (productImages != null) {
-//            request.setProductImages(productImages);
-//        }
-        productService.addProduct(request,productImages);
-        return ApiResponse.builder()
+        return ApiResponse.<ProductResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message("Thêm mới sản phẩm thành công!")
+                .data(productService.addProduct(request,productImages))
                 .build();
     }
     @PutMapping("/{productId}")
-    public ApiResponse<?> update(@PathVariable Long productId, @RequestPart @Valid RequestProduct request,
+    public ApiResponse<ProductResponse> update(@PathVariable Long productId, @RequestPart @Valid RequestProduct request,
                                  @RequestPart(required = false) MultipartFile productImages) {
 
-        productService.updateProduct(productId, request,productImages);
-        return ApiResponse.builder()
+        return ApiResponse.<ProductResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Cập nhật sản phẩm thành công!")
+                .data(productService.updateProduct(productId, request,productImages))
                 .build();
     }
     @GetMapping()

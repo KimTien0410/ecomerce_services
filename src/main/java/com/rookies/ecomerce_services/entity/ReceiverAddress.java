@@ -34,10 +34,8 @@ public class ReceiverAddress {
     @Column(name="is_default",columnDefinition = "boolean default false")
     private Boolean isDefault;
 
-    @ManyToOne
-    @JoinColumn(name="user_id", referencedColumnName = "user_id")
-    private User user;
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
 }

@@ -33,8 +33,8 @@ public class Product {
     private String productImages;
     @Column(name="product_description",columnDefinition = "TEXT")
     private String productDescription;
-    @Column(name="is_featured", columnDefinition = "BOOLEAN DEFAULT false")
-    private Boolean isFeatured;
+//    @Column(name="is_featured", columnDefinition = "BOOLEAN DEFAULT false")
+//    private Boolean isFeatured;
     @Column(name="average_rating")
     private Double averageRating;
 
@@ -45,30 +45,25 @@ public class Product {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedOn;
     @Column(name="is_deleted", columnDefinition = "BOOLEAN DEFAULT false", nullable = false)
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @ManyToOne
     @JoinColumn(name="category_id", referencedColumnName = "category_id")
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name="created_by", referencedColumnName = "user_id")
-    private User createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="created_by", referencedColumnName = "admin_id")
+    private Admin createdBy;
 
-    @ManyToOne
-    @JoinColumn(name="last_updated_by", referencedColumnName = "user_id")
-    private User lastUpdatedBy;
-
-
-//    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
-//    private List<OrderDetail> orderDetail;
-
-//    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
-//    private List<CartDetail> cartDetail;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="last_updated_by", referencedColumnName = "admin_id")
+    private Admin lastUpdatedBy;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     private List<Rating> ratings;
 
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    private FeatureProduct featureProduct;
 
     @PrePersist
     public void prePersist() {

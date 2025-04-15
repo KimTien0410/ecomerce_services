@@ -1,5 +1,6 @@
 package com.rookies.ecomerce_services.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rookies.ecomerce_services.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,12 +24,12 @@ public class Order {
     @Column(name = "order_id")
     private Long orderId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
-    @ManyToOne()
-    @JoinColumn(name = "receiver_address_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_address_id", nullable = false)
     private ReceiverAddress receiverAddress;
 
     @Column(name = "total_price", nullable = false)
@@ -42,16 +43,21 @@ public class Order {
     @Column(name = "order_status", nullable = false)
     private OrderStatus orderStatus;
 
-    @Column(name = "created_on")
+    @Column(name = "created_on", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
 
     @Column(name = "last_updated_on")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedOn;
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name="created_by", referencedColumnName = "user_id")
-    private User updatedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="created_by", referencedColumnName = "admin_id")
+    private Admin createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="last_updated_by", referencedColumnName = "admin_id")
+    private Admin lastUpdatedBy;
 
     @OneToMany(mappedBy = "order",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails;

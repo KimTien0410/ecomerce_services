@@ -27,6 +27,8 @@ public enum ErrorCode {
     PASSWORD_INCORRECT(400,"Mật khẩu không chính xác!", HttpStatus.BAD_REQUEST),
     CUSTOMER_NOT_FOUND(404,"Không tìm thấy khách hàng!", HttpStatus.NOT_FOUND),
 
+    RATING_NOT_FOUND(404,"Không tìm thấy đánh giá!", HttpStatus.NOT_FOUND),
+
     FEATURE_PRODUCT_NOT_FOUND(404,"Không tìm thấy sản phẩm nổi bật!", HttpStatus.NOT_FOUND),
     ;
     private int code;

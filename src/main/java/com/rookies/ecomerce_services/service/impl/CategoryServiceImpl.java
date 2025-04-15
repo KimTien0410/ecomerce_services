@@ -79,4 +79,10 @@ public class CategoryServiceImpl implements CategoryService {
 
         return categories.map(categoryMapper::toCategoryResponse);
     }
+
+    @Override
+    public Category getCategoryByCategoryId(Long categoryId) {
+        return categoryRepository.findByIdAndIsDeletedFalse(categoryId)
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+    }
 }

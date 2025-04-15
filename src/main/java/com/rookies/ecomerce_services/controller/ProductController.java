@@ -2,6 +2,7 @@ package com.rookies.ecomerce_services.controller;
 
 import com.rookies.ecomerce_services.dto.request.RequestProduct;
 import com.rookies.ecomerce_services.dto.response.ApiResponse;
+import com.rookies.ecomerce_services.dto.response.ProductItemResponse;
 import com.rookies.ecomerce_services.dto.response.ProductResponse;
 import com.rookies.ecomerce_services.service.ProductService;
 import jakarta.validation.Valid;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/products")
@@ -36,16 +39,27 @@ public class ProductController {
                 .build();
     }
     @GetMapping()
-    public ApiResponse<Page<ProductResponse>> getAllProduct(@RequestParam(required = false) String search,
-                                                            @RequestParam(required = false,defaultValue ="desc" ) String sort,
-                                                            @RequestParam(defaultValue = "productId") String sortBy,
-                                                            @RequestParam(defaultValue = "0") int page,
-                                                            @RequestParam(defaultValue = "10") int size,
-                                                            @RequestParam(defaultValue = "true") boolean isFeatured) {
-        return ApiResponse.<Page<ProductResponse>>builder()
+    public ApiResponse<Page<ProductItemResponse>> getAllProduct(@RequestParam(required = false) String search,
+                                                                @RequestParam(required = false,defaultValue ="desc" ) String sort,
+                                                                @RequestParam(defaultValue = "productId") String sortBy,
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<Page<ProductItemResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Lấy sản phẩm theo danh mục thành công!")
-                .data(productService.getAllProducts(page, size, sortBy, sort, search,isFeatured))
+                .data(productService.getAllProducts(page, size, sortBy, sort, search))
+                .build();
+    }
+    @GetMapping("/features")
+    public ApiResponse<List<ProductItemResponse>> getAllProduct(
+                                                                @RequestParam(required = false,defaultValue ="desc" ) String sort,
+                                                                @RequestParam(defaultValue = "priority") String sortBy,
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size) {
+        return ApiResponse.<List<ProductItemResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("Lấy sản phẩm theo danh mục thành công!")
+                .data(productService.getAllProductFeature(page, size, sortBy, sort))
                 .build();
     }
     @GetMapping("/{productId}")
@@ -66,24 +80,24 @@ public class ProductController {
     }
 
     @GetMapping("/category/{categoryId}")
-    public ApiResponse<Page<ProductResponse>> getAllProductByCategoryId(@PathVariable Long categoryId,
+    public ApiResponse<Page<ProductItemResponse>> getAllProductByCategoryId(@PathVariable Long categoryId,
                                                                           @RequestParam(defaultValue = "0") int page,
                                                                           @RequestParam(defaultValue = "10") int size,
                                                                           @RequestParam(defaultValue = "productId") String sortBy,
                                                                           @RequestParam(defaultValue = "desc") String sort) {
-        return ApiResponse.<Page<ProductResponse>>builder()
+        return ApiResponse.<Page<ProductItemResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Lấy sản phẩm theo danh mục thành công!")
                 .data(productService.getAllProductsByCategoryId(categoryId, page, size, sortBy, sort))
                 .build();
     }
     @GetMapping("category-slug/{categorySlug}")
-    public ApiResponse<Page<ProductResponse>> getAllProductByCategorySlug(@PathVariable String categorySlug,
+    public ApiResponse<Page<ProductItemResponse>> getAllProductByCategorySlug(@PathVariable String categorySlug,
                                                                            @RequestParam(defaultValue = "0") int page,
                                                                            @RequestParam(defaultValue = "10") int size,
                                                                            @RequestParam(defaultValue = "productId") String sortBy,
                                                                            @RequestParam(defaultValue = "desc") String sort) {
-        return ApiResponse.<Page<ProductResponse>>builder()
+        return ApiResponse.<Page<ProductItemResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Lấy sản phẩm theo danh mục thành công!")
                 .data(productService.getAllProductsByCategorySlug(categorySlug, page, size, sortBy, sort))

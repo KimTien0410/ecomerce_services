@@ -33,10 +33,9 @@ public class Product {
     private String productImages;
     @Column(name="product_description",columnDefinition = "TEXT")
     private String productDescription;
-//    @Column(name="is_featured", columnDefinition = "BOOLEAN DEFAULT false")
-//    private Boolean isFeatured;
+
     @Column(name="average_rating")
-    private Double averageRating;
+    private double averageRating;
 
     @Column(name="created_on")
     @Temporal(TemporalType.TIMESTAMP)
@@ -69,6 +68,8 @@ public class Product {
     public void prePersist() {
         this.createdOn = new Date();
         this.lastUpdatedOn = new Date();
+        this.isDeleted = false;
+        this.averageRating= 0.0;
     }
     @PreUpdate
     public void preUpdate() {

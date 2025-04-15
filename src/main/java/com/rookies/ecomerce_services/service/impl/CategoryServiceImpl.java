@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final Slug slug;
     @Transactional
     @Override
-    public void addCategory(RequestCategory categoryRequest) {
+    public void addCategory(@RequestBody RequestCategory categoryRequest) {
         Category category= categoryMapper.toCategory(categoryRequest);
         category.setCategorySlug(slug.generateSlug(categoryRequest.getCategoryName()));
         categoryRepository.save(category);
@@ -50,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Transactional
     @Override
-    public void updateCategory(Long categoryId, RequestCategory requestCategory) {
+    public void updateCategory(Long categoryId,@RequestBody RequestCategory requestCategory) {
         Category category= categoryRepository.findByIdAndIsDeletedFalse(categoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         categoryMapper.updateCategory(category, requestCategory);

@@ -1,5 +1,4 @@
 package com.rookies.ecomerce_services.dto.response;
-
 import lombok.*;
 
 import java.util.Date;
@@ -8,10 +7,12 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryResponse {
-    private Long categoryId;
-    private String categoryName;
-    private String categoryDescription;
+public class CustomerResponse {
+    private Long customerId;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String avatar;
     private Date createdOn;
     private Date lastUpdatedOn;
 }

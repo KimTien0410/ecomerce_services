@@ -13,13 +13,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
-//    @Mapping(target ="productImages",ignore = true)
     Product toProduct(RequestProduct requestProduct);
 
 
-//    @Mapping(target = "productImages", ignore = true)
     void updateProduct(@MappingTarget Product product, RequestProduct requestProduct);
-
 
     ProductResponse toProductResponse(Product product);
 

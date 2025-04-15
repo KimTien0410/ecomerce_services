@@ -44,18 +44,19 @@ public class Category {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedOn;
 
-    @ManyToOne
-    @JoinColumn(name="created_by", referencedColumnName = "user_id")
-    private User createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="created_by", referencedColumnName = "admin_id")
+    private Admin createdBy;
 
-    @ManyToOne
-    @JoinColumn(name="last_updated_by", referencedColumnName = "user_id")
-    private User lastUpdatedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="last_updated_by", referencedColumnName = "admin_id")
+    private Admin lastUpdatedBy;
 
     @PrePersist
     public void prePersist() {
         this.createdOn = new Date();
         this.lastUpdatedOn = new Date();
+        this.isDeleted = false;
     }
     @PreUpdate
     public void preUpdate() {

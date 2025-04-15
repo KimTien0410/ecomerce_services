@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     // Tìm tất cả sản phẩm chưa bị xóa
 
     Page<Product> findAllByIsDeletedFalse(Pageable pageable);
-    Page<Product> findAllByIsDeletedFalseAndIsFeaturedTrue(Pageable pageable);
+//    Page<Product> findAllByIsDeletedFalseAndIsFeaturedTrue(Pageable pageable);
     Page<Product> findAllByProductNameContainingAndIsDeletedFalse(String searchKey, Pageable pageable);
     Page<Product> findAllByCategory_CategoryIdAndIsDeletedFalse(Long categoryId, Pageable pageable);
     Page<Product> findAllByCategory_CategorySlugAndIsDeletedFalse(String categorySlug, Pageable pageable);

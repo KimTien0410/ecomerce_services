@@ -1,5 +1,6 @@
 package com.rookies.ecomerce_services.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -25,16 +26,8 @@ public class User {
     private String email;
 
     @Column(name="password", nullable = false)
+    @JsonIgnore
     private String password;
-
-    @Column(name="first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name="avatar")
-    private String avatar;
 
     @Column(name="is_deleted", columnDefinition = "boolean default false")
     private boolean isDeleted;
@@ -51,18 +44,16 @@ public class User {
     @JoinColumn(name="role_id", referencedColumnName = "role_id", nullable = false)
     private Role role;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ToString.Exclude
+    private Customer customer;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<ReceiverAddress> receiverAddress;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ToString.Exclude
+    private Admin admin;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Rating> ratings;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Order> orders;
-
-    @OneToOne(mappedBy = "user")
-    private Cart cart;
 
     @PrePersist
     public void prePersist() {

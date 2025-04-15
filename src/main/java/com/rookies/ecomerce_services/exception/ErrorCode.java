@@ -30,6 +30,7 @@ public enum ErrorCode {
     RATING_NOT_FOUND(404,"Không tìm thấy đánh giá!", HttpStatus.NOT_FOUND),
 
     FEATURE_PRODUCT_NOT_FOUND(404,"Không tìm thấy sản phẩm nổi bật!", HttpStatus.NOT_FOUND),
+    ADMIN_NOT_FOUND(404,"Không tìm thấy quản trị viên!", HttpStatus.NOT_FOUND),
     ;
     private int code;
     private String message;

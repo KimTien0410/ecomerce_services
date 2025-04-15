@@ -42,6 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .avatar(customer.getAvatar())
                 .firstName(customer.getFirstName())
                 .lastName(customer.getLastName())
+                .roleName(customer.getUser().getRole().getRoleName())
                 .createdOn(customer.getUser().getCreatedOn())
                 .lastUpdatedOn(customer.getUser().getLastUpdatedOn())
                 .build();

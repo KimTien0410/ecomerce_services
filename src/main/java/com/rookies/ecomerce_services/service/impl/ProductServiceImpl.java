@@ -160,4 +160,17 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
     }
+
+    @Transactional
+    @Override
+    public void updateProductRating(Long id, double rating) {
+        Product product = getByProductId(id);
+        if(product.getAverageRating()==0.0){
+            product.setAverageRating(rating);
+        }
+        else{
+            product.setAverageRating((product.getAverageRating() + rating) / 2);
+        }
+        productRepository.save(product);
+    }
 }

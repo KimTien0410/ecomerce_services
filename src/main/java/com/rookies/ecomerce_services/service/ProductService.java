@@ -20,5 +20,6 @@ public interface ProductService {
     public Page<ProductItemResponse> getAllProductsByCategorySlug(String categorySlug, int page, int size, String sortBy, String sortDir);
     public List<ProductItemResponse> getAllProductFeature(int page, int size, String sortBy, String sortDir);
     public Product getByProductId(Long id);
+    public void updateProductRating(Long id, double rating);
 
 }

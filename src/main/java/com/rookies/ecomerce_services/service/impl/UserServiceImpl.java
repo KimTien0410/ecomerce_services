@@ -42,33 +42,6 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user) {
         return userRepository.save(user);
     }
-
-
-    @Override
-    public UserResponse updateUser(Long id, RequestUser request, MultipartFile file) {
-        return null;
-    }
-
-    @Override
-    public UserResponse getUserById(Long id) {
-        return null;
-    }
-
-    @Override
-    public UserResponse getUserByEmail(String email) {
-        return null;
-    }
-
-    @Override
-    public Page<UserResponse> getAllUsers(int page, int size) {
-        return null;
-    }
-
-    @Override
-    public String deleteRestoreUser(Long id) {
-        return "";
-    }
-
     @Override
     public User getById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));

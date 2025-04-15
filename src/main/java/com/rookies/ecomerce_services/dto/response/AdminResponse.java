@@ -1,19 +1,17 @@
 package com.rookies.ecomerce_services.dto.response;
+
 import lombok.*;
 
-import java.util.Date;
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerResponse {
-    private Long customerId;
+public class AdminResponse {
+    private Long adminId;
     private String email;
+    private String role;
     private String firstName;
     private String lastName;
     private String avatar;
-    private String roleName;
-    private Date createdOn;
-    private Date lastUpdatedOn;
 }

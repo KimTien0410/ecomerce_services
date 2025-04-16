@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface CustomerService {
     Customer findByUserId(Long id);
+    Customer findByCustomerId(Long id);
     CustomerResponse toCustomerResponse(Customer customer);
     public CustomerResponse getProfile(Long userId);
     public void updateProfile(Long userId, RequestCustomer request, MultipartFile file);

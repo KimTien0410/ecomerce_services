@@ -24,11 +24,11 @@ public class ReceiverAddress {
     @Column(name="receiver_street",nullable = false)
     private String receiverStreet;
     @Column(name="receiver_ward",nullable = false)
-    private String ward;
+    private String receiverWard;
     @Column(name="receiver_district",nullable = false)
-    private String district;
+    private String receiverDistrict;
     @Column(name="receiver_city",nullable = false)
-    private String city;
+    private String receiverCity;
     @Column(name="receiver_address")
     private String receiverAddress;
     @Column(name="is_default",columnDefinition = "boolean default false")

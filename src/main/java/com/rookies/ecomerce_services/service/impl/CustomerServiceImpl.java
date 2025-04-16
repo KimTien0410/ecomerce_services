@@ -35,6 +35,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer findByCustomerId(Long id) {
+        return customerRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CUSTOMER_NOT_FOUND));
+    }
+
+    @Override
     public CustomerResponse toCustomerResponse(Customer customer) {
         return  CustomerResponse.builder()
                 .customerId(customer.getCustomerId())

@@ -1,5 +1,6 @@
 package com.rookies.ecomerce_services.exception;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,14 @@ public enum ErrorCode {
 
     FEATURE_PRODUCT_NOT_FOUND(404,"Không tìm thấy sản phẩm nổi bật!", HttpStatus.NOT_FOUND),
     ADMIN_NOT_FOUND(404,"Không tìm thấy quản trị viên!", HttpStatus.NOT_FOUND),
+    RECEIVER_NAME_NOT_BLANK(400,"Tên người nhận không được để trống!", HttpStatus.BAD_REQUEST),
+    RECEIVER_PHONE_NOT_BLANK(400,"Số điện thoại người nhận không được để trống!", HttpStatus.BAD_REQUEST),
+    RECEIVER_STREET_NOT_BLANK(400,"Địa chỉ người nhận không được để trống!", HttpStatus.BAD_REQUEST),
+    RECEIVER_WARD_NOT_BLANK(400,"Phường xã người nhận không được để trống!", HttpStatus.BAD_REQUEST),
+    RECEIVER_DISTRICT_NOT_BLANK(400,"Quận huyện người nhận không được để trống!", HttpStatus.BAD_REQUEST),
+    RECEIVER_CITY_NOT_BLANK(400,"Tỉnh thành người nhận không được để trống!", HttpStatus.BAD_REQUEST),
+    RECEIVER_ADDRESS_NOT_FOUND(404,"Không tìm thấy địa chỉ nhận hàng!", HttpStatus.NOT_FOUND),
+    CUSTOMER_ID_NOT_NULL(400,"ID khách hàng không được để trống!", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;

@@ -7,6 +7,7 @@ import com.rookies.ecomerce_services.dto.response.ApiResponse;
 import com.rookies.ecomerce_services.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AdminController {
     private final AdminService adminService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<AdminResponse> addAdmin(@RequestBody RequestAddAdmin request) {
         return ApiResponse.<AdminResponse>builder()
@@ -24,6 +26,7 @@ public class AdminController {
                 .data(adminService.addAdmin(request))
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ApiResponse<AdminResponse> getAdminById(@PathVariable Long id) {
         return ApiResponse.<AdminResponse>builder()
@@ -32,6 +35,7 @@ public class AdminController {
                 .data(adminService.getAdminById(id))
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ApiResponse<AdminResponse> updateAdmin(@PathVariable Long id, @RequestPart RequestUpdateAdmin request,
                                                   @RequestPart(required = false) MultipartFile file) {

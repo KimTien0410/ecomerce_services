@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
-
+    public User getAuthenticatedUser();
     public User getById(Long id);
     public User getByEmailLogin(String email);
     public boolean existsByEmail(String email);

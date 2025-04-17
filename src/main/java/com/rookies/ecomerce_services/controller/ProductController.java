@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<ProductResponse> add(@RequestPart @Valid RequestProduct request,
                               @RequestPart(required = false) MultipartFile productImages) {
@@ -28,6 +31,7 @@ public class ProductController {
                 .data(productService.addProduct(request,productImages))
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{productId}")
     public ApiResponse<ProductResponse> update(@PathVariable Long productId, @RequestPart @Valid RequestProduct request,
                                  @RequestPart(required = false) MultipartFile productImages) {

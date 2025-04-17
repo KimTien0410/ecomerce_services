@@ -22,8 +22,8 @@ public class ReceiverAddressServiceImpl implements ReceiverAddressService {
     private final CustomerService customerService;
     private final ReceiverAddressMapper receiverAddressMapper;
     @Override
-    public ReceiverAddressResponse addReceiverAddress( RequestReceiverAddress request) {
-        Customer customer = customerService.findByCustomerId(request.getCustomerId());
+    public ReceiverAddressResponse addReceiverAddress(RequestReceiverAddress request) {
+        Customer customer = customerService.getAuthenticated();
         ReceiverAddress receiverAddress= receiverAddressMapper.toReceiverAddress(request);
         receiverAddress.setCustomer(customer);
         receiverAddress.setIsDefault(false);
@@ -47,8 +47,8 @@ public class ReceiverAddressServiceImpl implements ReceiverAddressService {
     }
 
     @Override
-    public List<ReceiverAddressResponse> getReceiverAddressByCustomer(Long customerId) {
-        Customer customer = customerService.findByCustomerId(customerId);
+    public List<ReceiverAddressResponse> getReceiverAddressByCustomer() {
+        Customer customer = customerService.getAuthenticated();
         List<ReceiverAddress> receiverAddresses = receiverAddressRepository.findAllByCustomer(customer);
         return receiverAddressMapper.toReceiverAddressResponseList(receiverAddresses);
     }
@@ -73,8 +73,8 @@ public class ReceiverAddressServiceImpl implements ReceiverAddressService {
     }
 
     @Override
-    public ReceiverAddressResponse getDefaultReceiverAddressResponse(Long userId) {
-        return receiverAddressMapper.toReceiverAddressResponse(getDefaultReceiverAddress(userId));
+    public ReceiverAddressResponse getDefaultReceiverAddressResponse() {
+        return receiverAddressMapper.toReceiverAddressResponse(getDefaultReceiverAddress());
     }
 
     @Override
@@ -91,8 +91,9 @@ public class ReceiverAddressServiceImpl implements ReceiverAddressService {
     }
 
     @Override
-    public ReceiverAddress getDefaultReceiverAddress(Long userId) {
-        ReceiverAddress receiverAddress= receiverAddressRepository.findByCustomerAndIsDefaultTrue(customerService.findByUserId(userId))
+    public ReceiverAddress getDefaultReceiverAddress() {
+        Customer customer = customerService.getAuthenticated();
+        ReceiverAddress receiverAddress= receiverAddressRepository.findByCustomerAndIsDefaultTrue(customer)
                 .orElseThrow(() -> new AppException(ErrorCode.RECEIVER_ADDRESS_NOT_FOUND));
         return receiverAddress;
     }

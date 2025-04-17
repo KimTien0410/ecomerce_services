@@ -6,6 +6,7 @@ import com.rookies.ecomerce_services.dto.response.RatingResponse;
 import com.rookies.ecomerce_services.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RatingController {
     private final RatingService ratingService;
-
+    @PreAuthorize("hasRole('USER')")
     @PostMapping()
     public ApiResponse<RatingResponse> addReview(@RequestBody RequestRating rating) {
         RatingResponse response = ratingService.addReview(rating);
@@ -25,6 +26,7 @@ public class RatingController {
                 .data(response)
                 .build();
     }
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/{ratingId}")
     public ApiResponse<RatingResponse> updateReview(@PathVariable Long ratingId, @RequestBody RequestRating requestRating) {
         RatingResponse response = ratingService.updateReview(ratingId, requestRating);
@@ -34,6 +36,7 @@ public class RatingController {
                 .data(response)
                 .build();
     }
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/{ratingId}")
     public ApiResponse<Void> deleteReview(@PathVariable Long ratingId) {
         ratingService.deleteReview(ratingId);
@@ -42,6 +45,7 @@ public class RatingController {
                 .message("Xóa đánh giá thành công!")
                 .build();
     }
+
     @GetMapping("/{ratingId}")
     public ApiResponse<RatingResponse> getReviewById(@PathVariable Long ratingId) {
         RatingResponse response = ratingService.getReviewById(ratingId);

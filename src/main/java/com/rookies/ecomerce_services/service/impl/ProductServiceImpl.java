@@ -3,6 +3,7 @@ package com.rookies.ecomerce_services.service.impl;
 import com.rookies.ecomerce_services.dto.request.RequestProduct;
 import com.rookies.ecomerce_services.dto.response.ProductItemResponse;
 import com.rookies.ecomerce_services.dto.response.ProductResponse;
+import com.rookies.ecomerce_services.entity.Admin;
 import com.rookies.ecomerce_services.entity.Category;
 import com.rookies.ecomerce_services.entity.Product;
 import com.rookies.ecomerce_services.exception.AppException;
@@ -11,6 +12,7 @@ import com.rookies.ecomerce_services.mapper.ProductMapper;
 import com.rookies.ecomerce_services.repository.CategoryRepository;
 import com.rookies.ecomerce_services.repository.FeatureProductRepository;
 import com.rookies.ecomerce_services.repository.ProductRepository;
+import com.rookies.ecomerce_services.service.AdminService;
 import com.rookies.ecomerce_services.service.CategoryService;
 import com.rookies.ecomerce_services.service.FeatureProductService;
 import com.rookies.ecomerce_services.service.ProductService;
@@ -40,16 +42,20 @@ public class ProductServiceImpl implements ProductService {
     private final Slug slug;
     private final CloudinaryService cloudinaryService;
     private final FeatureProductRepository featureProductRepository;
+    private final AdminService adminService;
 
 
     @Transactional
     @Override
     public ProductResponse addProduct(RequestProduct requestProduct,MultipartFile file) {
+
         Product product = productMapper.toProduct(requestProduct);
         Category category = categoryService.getCategoryByCategoryId(requestProduct.getCategoryId());
         product.setCategory(category);
         product.setProductSlug(slug.generateSlug(requestProduct.getProductName()));
-        System.out.println(slug.generateSlug(requestProduct.getProductName()));
+//        System.out.println(slug.generateSlug(requestProduct.getProductName()));
+        Admin admin= adminService.getAuthenticated();
+        product.setCreatedBy(admin);
         if (file != null && !file.isEmpty()) {
             String imageUrl = cloudinaryService.uploadFile(file);
             product.setProductImages(imageUrl);
@@ -75,6 +81,8 @@ public class ProductServiceImpl implements ProductService {
             String imageUrl = cloudinaryService.uploadFile(file);
             product.setProductImages(imageUrl);
         }
+        Admin admin= adminService.getAuthenticated();
+        product.setLastUpdatedBy(admin);
         productRepository.save(product);
 
         return productMapper.toProductResponse(product);
@@ -85,7 +93,10 @@ public class ProductServiceImpl implements ProductService {
     public String deleteAndRestore(Long id) {
         Product product = getByProductId(id);
         product.setIsDeleted(!product.getIsDeleted());
+        Admin admin= adminService.getAuthenticated();
+        product.setLastUpdatedBy(admin);
         productRepository.save(product);
+
         if (product.getIsDeleted()) {
             return "Xoá sản phẩm thành công!";
         }

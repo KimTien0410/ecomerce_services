@@ -2,11 +2,13 @@ package com.rookies.ecomerce_services.service.impl;
 
 import com.rookies.ecomerce_services.dto.request.RequestCustomer;
 import com.rookies.ecomerce_services.dto.response.CustomerResponse;
+import com.rookies.ecomerce_services.entity.Admin;
 import com.rookies.ecomerce_services.entity.Customer;
 import com.rookies.ecomerce_services.entity.User;
 import com.rookies.ecomerce_services.exception.AppException;
 import com.rookies.ecomerce_services.exception.ErrorCode;
 import com.rookies.ecomerce_services.repository.CustomerRepository;
+import com.rookies.ecomerce_services.service.AdminService;
 import com.rookies.ecomerce_services.service.CustomerService;
 import com.rookies.ecomerce_services.service.UserService;
 import com.rookies.ecomerce_services.utils.CloudinaryService;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +30,11 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final UserService userService;
     private final CloudinaryService cloudinaryService;
+
+    @Override
+    public Customer getAuthenticated() {
+        return userService.getAuthenticatedUser().getCustomer();
+    }
 
     @Override
     public Customer findByUserId(Long id) {
@@ -54,22 +62,23 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse getProfile (Long id) {
-        Customer customer = findByUserId(id);
+    public CustomerResponse getProfile () {
+        Customer customer = getAuthenticated();
         return  CustomerResponse.builder()
                 .customerId(customer.getCustomerId())
                 .email(customer.getUser().getEmail())
                 .avatar(customer.getAvatar())
                 .firstName(customer.getFirstName())
                 .lastName(customer.getLastName())
+                .roleName(customer.getUser().getRole().getRoleName())
                 .createdOn(customer.getUser().getCreatedOn())
                 .lastUpdatedOn(customer.getUser().getLastUpdatedOn())
                 .build();
     }
     @Transactional
     @Override
-    public void updateProfile(Long id, RequestCustomer request, MultipartFile file) {
-        Customer customer = findByUserId(id);
+    public void updateProfile(RequestCustomer request, MultipartFile file) {
+        Customer customer = getAuthenticated();
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
         if(file != null && !file.isEmpty()) {
@@ -102,6 +111,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.CUSTOMER_NOT_FOUND));
         User user = customer.getUser();
+
         if (user.isDeleted()) {
             user.setDeleted(false);
             customerRepository.save(customer);

@@ -38,6 +38,11 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public Admin getAuthenticated() {
+        return userService.getAuthenticatedUser().getAdmin();
+    }
+
+    @Override
     public AdminResponse addAdmin(RequestAddAdmin request) {
         String email = request.getEmail();
         if (userService.existsByEmail(email)) {

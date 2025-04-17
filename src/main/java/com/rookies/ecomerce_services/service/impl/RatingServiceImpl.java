@@ -27,12 +27,10 @@ public class RatingServiceImpl implements RatingService {
     private final ProductService productService;
     private final CustomerService customerService;
 
-
-
     @Override
     @Transactional
     public RatingResponse addReview(RequestRating rating) {
-        Customer customer=customerService.findByUserId(rating.getUserId());
+        Customer customer=customerService.getAuthenticated();
         Long productId = rating.getProductId();
         int ratingValue = rating.getRatingStar();
         Product product =productService.getByProductId(productId);

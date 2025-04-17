@@ -3,11 +3,13 @@ package com.rookies.ecomerce_services.service.impl;
 import com.rookies.ecomerce_services.dto.request.RequestCategory;
 import com.rookies.ecomerce_services.dto.response.ApiResponse;
 import com.rookies.ecomerce_services.dto.response.CategoryResponse;
+import com.rookies.ecomerce_services.entity.Admin;
 import com.rookies.ecomerce_services.entity.Category;
 import com.rookies.ecomerce_services.exception.AppException;
 import com.rookies.ecomerce_services.exception.ErrorCode;
 import com.rookies.ecomerce_services.mapper.CategoryMapper;
 import com.rookies.ecomerce_services.repository.CategoryRepository;
+import com.rookies.ecomerce_services.service.AdminService;
 import com.rookies.ecomerce_services.service.CategoryService;
 import com.rookies.ecomerce_services.utils.Slug;
 import jakarta.transaction.Transactional;
@@ -28,11 +30,17 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final Slug slug;
+    private final AdminService adminService;
+
+
+
     @Transactional
     @Override
     public void addCategory(@RequestBody RequestCategory categoryRequest) {
+        Admin admin = adminService.getAuthenticated();
         Category category= categoryMapper.toCategory(categoryRequest);
         category.setCategorySlug(slug.generateSlug(categoryRequest.getCategoryName()));
+        category.setCreatedBy(admin);
         categoryRepository.save(category);
     }
 
@@ -52,18 +60,22 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Override
     public void updateCategory(Long categoryId,@RequestBody RequestCategory requestCategory) {
+        Admin admin = adminService.getAuthenticated();
         Category category= categoryRepository.findByIdAndIsDeletedFalse(categoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         categoryMapper.updateCategory(category, requestCategory);
         category.setCategorySlug(slug.generateSlug(requestCategory.getCategoryName()));
+        category.setLastUpdatedBy(admin);
         categoryRepository.save(category);
     }
     @Transactional
     @Override
     public String deleteCategory(Long categoryId) {
+        Admin admin = adminService.getAuthenticated();
         Category category= categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
         category.setDeleted(!category.isDeleted());
+        category.setLastUpdatedBy(admin);
         categoryRepository.save(category);
         if(category.isDeleted()){
             return "Xóa danh mục thành công!";

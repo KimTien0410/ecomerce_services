@@ -12,8 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestReceiverAddress {
-    @NotNull(message="CUSTOMER_ID_NOT_NULL")
-    private Long customerId;
     @NotBlank(message="RECEIVER_NAME_NOT_BLANK")
     private String receiverName;
     @NotBlank(message="RECEIVER_PHONE_NOT_BLANK")

@@ -8,10 +8,7 @@ import com.rookies.ecomerce_services.dto.response.RegisterResponse;
 import com.rookies.ecomerce_services.service.AuthenticateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -36,7 +33,9 @@ public class AuthenticateController {
                 .build();
     }
     @PostMapping("/logout")
-    public ApiResponse<Void> logout() {
+    public ApiResponse<Void> logout(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        authenticateService.logout(token);
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Đăng xuất thành công!")

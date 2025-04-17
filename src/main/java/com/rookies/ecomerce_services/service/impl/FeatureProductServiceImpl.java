@@ -2,12 +2,14 @@ package com.rookies.ecomerce_services.service.impl;
 
 import com.rookies.ecomerce_services.dto.request.RequestFeatureProduct;
 import com.rookies.ecomerce_services.dto.response.FeatureProductResponse;
+import com.rookies.ecomerce_services.entity.Admin;
 import com.rookies.ecomerce_services.entity.FeatureProduct;
 import com.rookies.ecomerce_services.entity.Product;
 import com.rookies.ecomerce_services.exception.AppException;
 import com.rookies.ecomerce_services.exception.ErrorCode;
 import com.rookies.ecomerce_services.mapper.FeatureProductMapper;
 import com.rookies.ecomerce_services.repository.FeatureProductRepository;
+import com.rookies.ecomerce_services.service.AdminService;
 import com.rookies.ecomerce_services.service.FeatureProductService;
 import com.rookies.ecomerce_services.service.ProductService;
 import jakarta.transaction.Transactional;
@@ -26,6 +28,7 @@ public class FeatureProductServiceImpl implements FeatureProductService {
     private final FeatureProductRepository featureProductRepository;
     private final ProductService productService;
     private final FeatureProductMapper featureProductMapper;
+    private final AdminService adminService;
 
     @Override
     @Transactional
@@ -33,6 +36,8 @@ public class FeatureProductServiceImpl implements FeatureProductService {
         FeatureProduct featureProduct = featureProductMapper.requestToFeatureProduct(requestFeatureProduct);
         Product product = productService.getByProductId(requestFeatureProduct.getProductId());
         featureProduct.setProduct(product);
+        Admin admin= adminService.getAuthenticated();
+        product.setCreatedBy(admin);
         featureProductRepository.save(featureProduct);
         return featureProductMapper.featureProductToResponse(featureProduct);
     }
@@ -44,6 +49,8 @@ public class FeatureProductServiceImpl implements FeatureProductService {
         featureProductMapper.updateFeatureProduct(featureProduct, requestFeatureProduct);
 //        Product product = productService.getByProductId(requestFeatureProduct.getProductId());
 //        featureProduct.setProduct(product);
+        Admin admin= adminService.getAuthenticated();
+        featureProduct.setLastUpdatedBy(admin);
         featureProductRepository.save(featureProduct);
         return featureProductMapper.featureProductToResponse(featureProduct);
     }
@@ -52,6 +59,8 @@ public class FeatureProductServiceImpl implements FeatureProductService {
     @Transactional
     public void deleteFeatureProduct(Long featureProductId) {
         FeatureProduct featureProduct=getFeatureProductById(featureProductId);
+        Admin admin= adminService.getAuthenticated();
+        featureProduct.setLastUpdatedBy(admin);
         featureProductRepository.delete(featureProduct);
     }
 

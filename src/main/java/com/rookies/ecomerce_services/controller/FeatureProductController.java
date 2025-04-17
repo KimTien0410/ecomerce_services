@@ -7,6 +7,7 @@ import com.rookies.ecomerce_services.service.FeatureProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class FeatureProductController {
     private final FeatureProductService featureProductService;
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<FeatureProductResponse> addFeatureProduct(@RequestBody RequestFeatureProduct requestFeatureProduct){
         return ApiResponse.<FeatureProductResponse>builder()
@@ -22,7 +25,7 @@ public class FeatureProductController {
                 .data(featureProductService.addFeatureProduct(requestFeatureProduct))
                 .build();
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{featureProductId}")
     public ApiResponse<FeatureProductResponse> updateFeatureProduct(@PathVariable Long featureProductId,
                                                                     @RequestBody RequestFeatureProduct requestFeatureProduct){
@@ -32,6 +35,7 @@ public class FeatureProductController {
                 .data(featureProductService.updateFeatureProduct(featureProductId, requestFeatureProduct))
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{featureProductId}")
     public ApiResponse<?> deleteFeatureProduct(@PathVariable Long featureProductId){
         featureProductService.deleteFeatureProduct(featureProductId);
@@ -48,7 +52,7 @@ public class FeatureProductController {
                 .data(featureProductService.getFeatureProductResponseById(featureProductId))
                 .build();
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     public ApiResponse<Page<FeatureProductResponse>> getAllFeatureProduct(@RequestParam(defaultValue = "0") int page,
                                                                           @RequestParam(defaultValue = "10") int size,

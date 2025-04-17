@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
+
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public ApiResponse<?> add(@RequestBody @Valid RequestCategory request) {
         categoryService.addCategory(request);
@@ -23,6 +27,7 @@ public class CategoryController {
                 .message("Thêm mới danh mục thành công!")
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{categoryId}")
     public ApiResponse<?> update(@PathVariable Long categoryId, @RequestBody @Valid RequestCategory request) {
         categoryService.updateCategory(categoryId, request);
@@ -49,6 +54,7 @@ public class CategoryController {
                 .data(categoryResponse)
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{categoryId}")
     public ApiResponse<String> delete(@PathVariable Long categoryId) {
         String message = categoryService.deleteCategory(categoryId);

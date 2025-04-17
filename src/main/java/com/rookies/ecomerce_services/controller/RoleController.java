@@ -5,6 +5,7 @@ import com.rookies.ecomerce_services.dto.response.ApiResponse;
 import com.rookies.ecomerce_services.dto.response.RoleResponse;
 import com.rookies.ecomerce_services.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RoleController {
     private final RoleService roleService;
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public ApiResponse<RoleResponse> addRole(@RequestBody RequestRole request) {
         return ApiResponse.<RoleResponse>builder()
@@ -20,6 +23,7 @@ public class RoleController {
                 .data(roleService.addRole(request))
                 .build();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{roleId}")
     public ApiResponse<RoleResponse> updateRole(@PathVariable Long roleId, @RequestBody RequestRole request) {
         return ApiResponse.<RoleResponse>builder()
@@ -44,6 +48,8 @@ public class RoleController {
                 .data(roleService.getRoleByName(roleName))
                 .build();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     public ApiResponse<?> getAllRoles() {
         return ApiResponse.builder()

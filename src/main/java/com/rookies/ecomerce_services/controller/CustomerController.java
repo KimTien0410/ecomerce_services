@@ -7,6 +7,7 @@ import com.rookies.ecomerce_services.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.query.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,24 +17,24 @@ import org.springframework.web.multipart.MultipartFile;
 public class CustomerController {
     private final CustomerService customerService;
     @GetMapping("/profile")
-    public ApiResponse<CustomerResponse> getProfile(@RequestParam Long userId) {
+    public ApiResponse<CustomerResponse> getProfile() {
         return ApiResponse.<CustomerResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Lấy thông tin tài khoản thành công!")
-                .data(customerService.getProfile(userId))
+                .data(customerService.getProfile())
                 .build();
     }
 
     @PutMapping("/profile")
-    public ApiResponse<CustomerResponse> updateProfile(@RequestParam Long userId , @RequestPart(name="customer") RequestCustomer request,
+    public ApiResponse<CustomerResponse> updateProfile( @RequestPart(name="customer") RequestCustomer request,
                                                        @RequestPart(name = "avatar", required = false) MultipartFile file) {
-        customerService.updateProfile(userId, request, file);
+        customerService.updateProfile(request, file);
         return ApiResponse.<CustomerResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Cập nhật thông tin tài khoản thành công!")
                 .build();
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     public ApiResponse<?> getAllCustomers(@RequestParam(required = false) String search,
                                         @RequestParam(required = false,defaultValue = "0")int page,
@@ -46,6 +47,8 @@ public class CustomerController {
                 .data(customerService.getAllCustomers(page, size, sortBy, sortDir,search))
                 .build();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public ApiResponse<?> deleteRestoreCustomer(@PathVariable Long id) {
         return ApiResponse.builder()

@@ -40,6 +40,10 @@ public enum ErrorCode {
     RECEIVER_CITY_NOT_BLANK(400,"Tỉnh thành người nhận không được để trống!", HttpStatus.BAD_REQUEST),
     RECEIVER_ADDRESS_NOT_FOUND(404,"Không tìm thấy địa chỉ nhận hàng!", HttpStatus.NOT_FOUND),
     CUSTOMER_ID_NOT_NULL(400,"ID khách hàng không được để trống!", HttpStatus.BAD_REQUEST),
+
+    UNAUTHENTICATED(401,"Vui lòng đăng nhập!", HttpStatus.UNAUTHORIZED),
+    INVALID_TOKEN(401,"Token invalid!", HttpStatus.UNAUTHORIZED),
+    TOKEN_NOT_FOUND(404,"Token không tồn tại!", HttpStatus.NOT_FOUND),
     ;
     private int code;
     private String message;

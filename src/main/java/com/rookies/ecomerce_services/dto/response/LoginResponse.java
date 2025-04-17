@@ -8,6 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponse {
-    private String email;
-    private RoleResponse role;
+    private String accessToken;
 }
